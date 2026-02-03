@@ -1,0 +1,198 @@
+Você é um especialista em SRE e Observabilidade, Prometheus e Grafana 
+e precisa garantir estabilidade e previsibilidade a falhas do sistema.
+Analise a métrica abaixo e responda de forma clara, objetiva e prática:
+Métrica: 
+Explique:
+Sugira um nome adequado para o gráfico no Grafana
+Forneça uma descrição curta e objetiva do gráfico
+Informe a unidade correta a ser utilizada
+
+
+Disponibilidade do container                                         			               up{container="hip-backoffice"}
+Status de prontidão do                                                   	                   avg_over_time(kube_pod_container_status_ready{container="hip-backoffice"}[1h]) * 100
+Reinícios do container 														                   rate(kube_pod_container_status_restarts_total{container="hip-backoffice"}[5m])
+Última observação do container 												                   container_last_seen{container="hip-backoffice"}
+Uso de CPU do container 														               time() - container_last_seen{container="hip-backoffice"}
+Uso instantâneo de CPU 																		   node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{container="hip-backoffice"}
+Uso de CPU do sistema 													                       system_cpu_usage{container="hip-backoffice"}
+Carga média do sistema (1m) 												                   system_load_average_1m{container="hip-backoffice"}
+Memória ativa do container                                                                     container_memory_working_set_bytes{container="hip-backoffice"}
+Máximo uso de memória do container                                                             container_memory_max_usage_bytes{container="hip-backoffice"}
+Eventos de OOM do container                                                                    rate(container_oom_events_total{container="hip-backoffice"}[5m])
+Falhas de alocação de memória                                                                  rate(container_memory_failures_total{container="hip-backoffice"}[5m])
+Uso de Heap da JVM (% do máximo) 											                   100 * jvm_memory_used_bytes{area="heap",container="hip-backoffice"} / jvm_memory_max_bytes{area="heap",container="hip-backoffice"}												
+Taxa de tempo em pausas de GC 												                   100 * jvm_memory_used_bytes{area="heap"} / jvm_memory_max_bytes{area="heap"}
+Maior pausa de GC da JVM                                                                       jvm_gc_pause_seconds_max{container="hip-backoffice"}
+Overhead de GC da JVM                                                     					   jvm_gc_overhead{container="hip-backoffice"}
+Threads vivas da JVM                    													   jvm_threads_live_threads{container="hip-backoffice"}
+Pico de threads da JVM                                                    					   jvm_threads_peak_threads{container="hip-backoffice"}
+Latência HTTP p95                                                                              rate(http_server_requests_seconds_count{container="hip-backoffice",status=~"5.."}[1m])
+Latência HTTP Máxima 																		   histogram_quantile(0.95,rate(http_server_requests_seconds_bucket{container="hip-backoffice"}[5m]))
+Conexões ativas no pool de banco (HikariCP)													   100 * hikaricp_connections_active/hikaricp_connections_max
+Conexões ociosas no pool de banco (HikariCP)										    	   100 *hikaricp_connections_active{container="hip-backoffice"}/hikaricp_connections_max{container="hip-backoffice"}
+Conexões de banco em espera (HikariCP)														   hikaricp_connections_pending{container="hip-backoffice"}
+Tamanho máximo do pool de conexões (HikariCP)                                                  hikaricp_connections_max{container="hip-backoffice"}
+Timeouts de conexão com o banco (HikariCP)													   rate(http_server_requests_seconds_count{container="hip-backoffice"}[1m])
+RabbitMQ – Mensagens Publicadas (msg/s)														   rate(rabbitmq_consumed_total{container="hip-backoffice"}[5m])
+RabbitMQ Consumer Throughput                                                                   rate(rabbitmq_consumed_total{container="hip-backoffice"}[5m]) == 0
+RabbitMQ – Erros de Publicação																   rate(rabbitmq_channel_messages_unroutable_dropped_total[5m])
+RabbitMQ Message Reject Rate																   rate(http_server_requests_seconds_count{status=~"5..",container="hip-backoffice"}[5m])
+Uso de Disco do Container																	   increase(container_fs_usage_bytes{container="hip-backoffice"}[30m])
+Uso de Disco do Container (Bytes)															   container_fs_usage_bytes{container="hip-backoffice"}
+Container Free Inodes																		   container_fs_inodes_free{container="hip-backoffice"} < 10000
+Total de Inodes do Container																   100 *(container_fs_inodes_total{container="hip-backoffice"}- container_fs_inodes_free{container="hip-backoffice"})/container_fs_inodes_total{container="hip-backoffice"}
+Taxa de Eventos de Log																		   rate(kube_pod_container_status_restarts_total{container="hip-backoffice"}[5m])
+
+
+
+-------------------------------------------------------------------------------------------------------------------------
+
+
+
+Tempo Médio de Resposta HTTP													sum(rate(http_server_requests_seconds_sum{container=~"hip-backoffice"}[5m])) / sum(rate(http_server_requests_seconds_count{container=~"hip-backoffice"}[5m]))			
+Percentual de RAM referente ao  cluster											100 * sum(container_memory_working_set_bytes{container=~"hip-backoffice"}) / sum(machine_memory_bytes)
+Tempo médio de Inicialização da Aplicação										application_started_time_seconds{container="hip-backoffice"}
+Erros HTTP 5xx por Endpoint														sum(increase(http_server_requests_seconds_count{status=~"5..", uri!="/actuator/prometheus", container="hip-backoffice"}[5m]))
+Taxa de Sucesso de Requisições HTTP												sum(increase(http_server_requests_seconds_count{status=~"2..", uri!="/actuator/prometheus", container="hip-backoffice"}[5m]))
+Latência HTTP - P99 															histogram_quantile(0.99, sum(rate(http_server_requests_seconds_bucket{container="hip-backoffice", uri!="/actuator/prometheus"}[5m])) by (method, uri, container, le))
+Tempo de Inicialização da Aplicação												max(application_ready_time_seconds{container="hip-backoffice"}) - max(application_started_time_seconds{container="hip-backoffice"})
+Percentual de Requisições 4xx													sum(increase(http_server_requests_seconds_count{status=~"4..", uri!="actuator/prometheus", container="hip-backoffice"}[5m]))
+Requisições HTTP 																rate(http_server_requests_seconds_count{container=~"hip-backoffice"}[5m])
+Uso de Disco (%)																100 * (1 - (disk_free_bytes / disk_total_bytes{container=~"hip-backoffice"}))
+Uso de CPU (cores) por Container												rate(container_cpu_usage_seconds_total{container=~"hip-backoffice"}[5m])
+Tempo Total de Compilação JIT													jvm_compilation_time_ms_total{container=~"hip-backoffice"}
+Requisições HTTP Recebidas														sum(increase(http_server_requests_seconds_count{container=~"hip-backoffice"}[5m]))
+Uso de Memória (MiB) por Container												sum(container_memory_usage_bytes{container=~"hip-backoffice"})
+Tempo de Atividade da Aplicação													process_uptime_seconds{container=~"hip-backoffice"}
+Uso de CPU do processo															100 * rate(process_cpu_time_ns_total{container=~"hip-backoffice"}[5m]) / 1e9 / system_cpu_count
+Percentual de CPU referente ao  cluster											100 * sum(rate(container_cpu_usage_seconds_total{container=~"hip-backoffice"}[5m])) / sum(machine_cpu_cores)
+Uso da CPU SpringBoot															process_cpu_usage{container=~"hip-backoffice"} * 100
+Uso de Memória Non-Heap (MB)													jvm_memory_used_bytes{container="hip-backoffice",area="nonheap"} / 1024 / 1024
+Tempo Médio de Autorização - Spring Security									rate(spring_security_authorizations_seconds_sum{container=~"hip-backoffice"}[5m]) / rate(spring_security_authorizations_seconds_count{container=~"hip-backoffice"}[5m])
+Total de Endpoints Acessados													count(http_server_requests_seconds_count{container="hip-backoffice", uri!="/actuator/prometheus",}) by (uri)
+Uso de Memória Heap (MB)														jvm_memory_used_bytes{container="hip-backoffice", area="heap"} / 1024 / 1024
+Capacidade Máxima de Memória por Área											jvm_memory_max_bytes{container=~"hip-backoffice"}
+Tempo total de requisições ativas												rate(http_server_requests_active_seconds_sum{container="hip-backoffice"}[5m])
+Carga média do sistema (1 minuto)												system_load_average_1m{container=~"hip-backoffice"}
+Uso de Non-Heap JVM (% reservado)												100 * (jvm_memory_used_bytes{container="hip-backoffice", area="nonheap"} / jvm_memory_committed_bytes{area="nonheap"})
+tempo médio de pausa do Garbage Collector										rate(jvm_gc_pause_seconds_sum{container=~"hip-backoffice"}[5m]) / rate(jvm_gc_pause_seconds_count{container=~"hip-backoffice"}[5m])
+Pico de Sessões Ativas no Tomcat												tomcat_sessions_active_max_sessions{container=~"hip-backoffice"}
+Uso de Heap JVM (% reservado)													100 * (jvm_memory_used_bytes{container="hip-backoffice", area="heap"} / jvm_memory_committed_bytes{area="heap"})
+Frequência de pausas do Garbage Collector (GC)									rate(jvm_gc_pause_seconds_count{container=~"hip-backoffice"}[5m])
+Maior Pausa do Garbage Collector												jvm_gc_pause_seconds_max{container=~"hip-backoffice"}
+Sessões Expiradas no Tomcat														increase(tomcat_sessions_expired_sessions_total{container=~"hip-backoffice"}[5m])
+JVM Heap Usage After GC (Long-Lived)											jvm_memory_usage_after_gc{container="hip-backoffice", area="heap",pool="long-lived"} * 100
+Memória Usada por Buffers da JVM												jvm_buffer_memory_used_bytes{container=~"hip-backoffice"} / 1024 / 1024
+Taxa de memória promovida ao heap velho											rate(jvm_gc_memory_promoted_bytes_total{container=~"hip-backoffice"}[5m])
+Total de Classes Descarregadas													jvm_classes_unloaded_classes_total{container=~"hip-backoffice"}
+GC Pause Duration Rate (Impacto do Garbage Collector)							rate(jvm_gc_pause_seconds_sum{container=~"hip-backoffice"}[5m])
+Visão Geral de Threads da JVM													jvm_threads_live_threads{container=~"hip-backoffice"} | jvm_threads_daemon_threads{container=~"hip-backoffice"} | 	jvm_threads_peak_threads{container=~"hip-backoffice"}
+Estados das Threads																jvm_threads_states_threads{container=~"hip-backoffice"}	
+Capacidade Total dos Buffers da JVM												jvm_buffer_total_capacity_bytes{container=~"hip-backoffice"} / 1024 / 1024
+Taxa de alocação de memória da JVM												rate(jvm_gc_memory_allocated_bytes_total{container="hip-backoffice" }[5m])
+Classes Java Carregadas															jvm_classes_loaded_classes{container=~"hip-backoffice"}
+Taxa de Requisições HTTP Ativas													rate(http_server_requests_active_seconds_count{container=~"hip-backoffice"}[5m])
+Sessões HTTP Ativas no Tomcat													tomcat_sessions_active_current_sessions{container=~"hip-backoffice"}
+Taxa de Criação de Threads														rate(jvm_threads_started_threads_total{container=~"hip-backoffice"}[5m])
+JVM Info - Ambiente e Versão													jvm_info{container="hip-backoffice"}
+Tempo Total de Autorizações (Spring Security)									rate(spring_security_authorizations_seconds_sum{container=~"hip-backoffice"}[5m])
+Autenticações Anônimas															increase(spring_security_filterchains_authentication_anonymous_before_total{container=~"hip-backoffice"}[5m])
+Quantidade de Buffers da JVM													jvm_buffer_count_buffers{container=~"hip-backoffice"}
+Tempo Máximo de Vida de Sessão HTTP no Tomcat									tomcat_sessions_alive_max_seconds{container=~"hip-backoffice"}
+Tempo Atual de Requisições Ativas												rate(spring_security_http_secured_requests_seconds_sum{container=~"hip-backoffice"}[5m]) / rate(spring_security_http_secured_requests_seconds_count{container=~"hip-backoffice"}[5m])
+Total de Sessões Criadas no Tomcat												increase(tomcat_sessions_created_sessions_total{container=~"hip-backoffice"}[5m])
+Tempo Máximo de Resposta HTTP por Endpoint										max_over_time(http_server_requests_seconds_max{container="hip-backoffice", uri!="/actuator/prometheus"}[5m])
+Tempo Máximo de Autorização														max_over_time(spring_security_authorizations_seconds_max{container=~"hip-backoffice"}[5m])
+Quantidade de Autorizações no Spring Security									rate(spring_security_authorizations_seconds_count{container=~"hip-backoffice"}[5m])
+Taxa STATUS nos Repositórios Spring Data										rate(spring_data_repository_invocations_seconds_count{container="hip-backoffice", state="ERROR"}[1m]) | rate(spring_data_repository_invocations_seconds_count{container="hip-backoffice", state="SUCCESS"}[1m])
+Sessões Rejeitadas no Tomcat													increase(tomcat_sessions_rejected_sessions_total{container=~"hip-backoffice"}[5m])
+Tempo da Filter Chain - Spring Security											rate(spring_security_filterchains_seconds_sum{container=~"hip-backoffice"}[5m]) 
+Total Completed Executor Tasks													increase(executor_completed_tasks_total{job="hip-backoffice-svc"}[1m])
+Tempo Total Gasto por Método (por segundo)										sum by(repository, method) (rate(spring_data_repository_invocations_seconds_sum{container="hip-backoffice"}[1m]))
+Tempo máximo de requisição ativa                                                avg_over_time(http_server_requests_active_seconds_max{container=~"hip-backoffice"}[5m])
+Tempo de Execução das Filter Chains (Spring Security)							rate(spring_security_filterchains_seconds_sum{container=~"hip-backoffice"}[5m]) / rate(spring_security_filterchains_seconds_count{container=~"hip-backoffice"}[5m])
+Executor Pool Size (Current)													executor_pool_size_threads{job="hip-backoffice-svc"}
+Log Events by Level																increase(logback_events_total{job="hip-backoffice-svc"}[5m])
+Taxa de Requisições Protegidas por Segundo										rate(spring_security_http_secured_requests_seconds_count{container=~"hip-backoffice"}[5m])
+Exceções - Após a Cadeia de Filtros												increase(spring_security_filterchains_access_exceptions_after_total{container=~"hip-backoffice"}[5m])
+Capacidade Total dos Buffers JVM (Bytes)										jvm_buffer_total_capacity_bytes{container=~"hip-backoffice"}
+Tempo Médio por Autorização														rate(spring_security_authorizations_seconds_sum{container=~"hip-backoffice"}[5m]) / rate(spring_security_authorizations_seconds_count{container=~"hip-backoffice"}[5m])
+Tempo Máximo - Requisições Seguras												max_over_time(spring_security_http_secured_requests_seconds_max{container=~"hip-backoffice"}[5m])
+Autenticações Basic																increase(spring_security_filterchains_authentication_basic_before_total{container=~"hip-backoffice"}[5m])
+Contagem de Fases Concorrentes do Garbage Collector (GC)                        jvm_gc_concurrent_phase_time_seconds_count{container="hip-backoffice"}
+Tempo Máximo - Cadeia de Filtros												max_over_time(spring_security_filterchains_seconds_max{container=~"hip-backoffice"}[5m])
+Autenticações Bearer															increase(spring_security_filterchains_authentication_bearer_before_total{container=~"hip-backoffice"}[5m])
+Taxa de Invocações de Repositórios Spring Data									sum by(repository, method, state) (rate(spring_data_repository_invocations_seconds_count{container=~"hip-backoffice"}[1m]))
+Tamanho Atual dos Dados Vivos na Heap											jvm_gc_live_data_size_bytes{container="hip-backoffice"}
+Taxa de STATUS nos Repositórios Spring Data por Tipo de Exceção				    rate(spring_data_repository_invocations_seconds_count{container="hip-backoffice", state="ERROR"}[1m]) | rate(spring_data_repository_invocations_seconds_count{container="hip-backoffice", state="SUCCESS"}[1m])
+Tempo Médio das Chamadas aos Repositórios Spring Data							rate(spring_data_repository_invocations_seconds_sum{container=~"hip-backoffice"}[1m]) / rate(spring_data_repository_invocations_seconds_count{container=~"hip-backoffice"}[1m])
+Top 5 Repositórios com Maior Latência Média										topk(5, rate(spring_data_repository_invocations_seconds_sum{container="hip-backoffice"}[1m]) / rate(spring_data_repository_invocations_seconds_count{container="hip-backoffice"}[1m]))
+Limite Máximo de Arquivos Abertos pelo Processo									process_files_max_files{container="hip-backoffice"}
+Taxa de Invocações dos Repositórios Spring Data									sum by(repository, method, state) (rate(spring_data_repository_invocations_seconds_count{container="hip-backoffice"}[5m]))
+Execuções Finais do Filtro Context Holder (Spring Security)						rate(spring_security_filterchains_context_holder_after_total{container="hip-backoffice"}[5m])
+Active Threads in Executor														executor_active_threads{job="hip-backoffice-svc"}
+Execuções Finais do Filtro de Logout (Spring Security)							rate(spring_security_filterchains_logout_after_total{container="hip-backoffice"}[5m])
+Executor Queue Remaining Capacity												executor_queue_remaining_tasks{job="hip-backoffice-svc"}
+Executor Core Pool Size															executor_pool_core_threads{job="hip-backoffice-svc"}
+Executor Max Pool Size															executor_pool_max_threads{job="hip-backoffice-svc"}
+Buffers JVM Ativos																jvm_buffer_count_buffers{container=~"hip-backoffice"}
+Containers Ready 																kube_pod_container_status_ready{container="hip-backoffice"}
+Maior Duração de Fase Concorrente do GC											jvm_gc_concurrent_phase_time_seconds_max{container="hip-backoffice"}
+Executor Queued Tasks															executor_queued_tasks{job="hip-backoffice-svc"}
+Tempo Total em Fases Concorrentes do GC											jvm_gc_concurrent_phase_time_seconds_sum{container="hip-backoffice"}
+Taxa de Leitura de Disco 														rate(container_fs_reads_bytes_total{container="hip-backoffice"}[5m])
+Uso de CPU (cores) 																node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{container="hip-backoffice"}
+Tempo Total de Compilação Just-In-Time (JIT) da JVM								jvm_compilation_time_ms_total{container=~"hip-backoffice"}
+Taxa de Restarts 																kube_pod_container_status_restarts_total{container="hip-backoffice"}
+Memória RSS (RAM Real) 															container_memory_rss{container="hip-backoffice"}
+Pressão de Memória Crítica														container_memory_failcnt{container="hip-backoffice"}
+Uptime do Container 															container_start_time_seconds{container="hip-backoffice"}
+Thread Pool Overview															executor_active_threads{job="hip-backoffice-svc"} | executor_pool_size_threads{job="hip-backoffice-svc"} | 	executor_queued_tasks{job="hip-backoffice-svc"} | executor_queue_remaining_tasks{job="hip-backoffice-svc"}
+Total de Classes Java Descarregadas												jvm_classes_unloaded_classes_total{container="hip-backoffice"}
+Falhas de Memória (cgroup)														container_memory_failcnt{container="hip-backoffice"}
+Threads Ativas na JVM															jvm_threads_live_threads{container="hip-backoffice"}
+Execuções do Gerenciador de Sessões (Spring Security)							rate(spring_security_filterchains_session_management_after_total{container="hip-backoffice"}[5m])
+Capacidade Máxima dos Dados Vivos na Heap										jvm_gc_max_data_size_bytes{container="hip-backoffice"}
+Uso Real de RAM																	node_namespace_pod_container:container_memory_rss{container="hip-backoffice"}
+Execuções Finais do Filtro Context Async (Spring Security)						rate(spring_security_filterchains_context_async_after_total{container="hip-backoffice"}[5m])
+Containers Terminated 															kube_pod_container_status_terminated{container="hip-backoffice"}
+Arquivos Abertos pelo Processo													process_files_open_files{container="hip-backoffice"}
+Latência Máxima HTTP															http_server_requests_seconds_max{container="hip-backoffice"}
+Execuções de Codificação de URL de Sessão (Spring Security)						rate(spring_security_filterchains_requestcache_after_total{container="hip-backoffice"}[5m])
+Conexões Pendentes no Pool HikariCP												hikaricp_connections_pending{container="hip-backoffice"}
+Containers em Waiting 															kube_pod_container_status_waiting{container="hip-backoffice"}
+Overhead de Garbage Collection (GC)												jvm_gc_overhead{container="hip-backoffice"}	
+Execuções do Filtro RequestCache (Spring Security)								rate(spring_security_filterchains_requestcache_after_total{container="hip-backoffice"}[5m])
+Conexões JDBC Disponíveis														jdbc_connections_idle{container="hip-backoffice"}
+Containers Iniciados 															kube_pod_container_state_started{container="hip-backoffice"}
+Conexões Ativas no Pool HikariCP												hikaricp_connections_active{container="hip-backoffice"}
+Taxa de Escrita em Disco 														rate(container_fs_writes_bytes_total{container="hip-backoffice"}[5m])
+Mensagens Consumidas no RabbitMQ												rabbitmq_consumed_total{container="hip-backoffice"}
+Memória em Cache 																container_memory_cache{container="hip-backoffice"}
+Capacidade Máxima do Pool de Conexões											hikaricp_connections_max{container="hip-backoffice"}
+Última Observação do Container 													container_last_seen{container="hip-backoffice"}
+Containers Running 																kube_pod_container_status_running{container="hip-backoffice"}
+Falhas de Alocação de Memória 													container_memory_failures_total{container="hip-backoffice"}
+Canais Ativos no RabbitMQ														rabbitmq_channels{container="hip-backoffice"}
+Falhas por Memória 																container_oom_events_total{container="hip-backoffice"}
+CPU System (cores)																system_cpu_usage{container="hip-backoffice"}
+Memória Committed da JVM														jvm_memory_committed_bytes{container="hip-backoffice"}
+Falhas ao Publicar Mensagens no RabbitMQ										rabbitmq_failed_to_publish_total{container="hip-backoffice"}
+Pico de Threads JVM																jvm_threads_peak_threads{container="hip-backoffice"}
+Uso de Conexões RabbitMQ														rabbitmq_connections{container="hip-backoffice"}
+Tempo Máximo de Requisição HTTP Ativa											http_server_requests_active_seconds_max{container="hip-backoffice"}
+Scrape Duration																	scrape_duration_seconds{container="hip-backoffice"}
+Conexões Ociosas no Pool HikariCP												hikaricp_connections_idle{container="hip-backoffice"}
+Memória em Uso (Working Set)													node_namespace_pod_container:container_memory_working_set_bytes{container="hip-backoffice"}
+Timeouts de Conexão no HikariCP													hikaricp_connections_timeout_total{container="hip-backoffice"}
+Conexões JDBC Ativas															jdbc_connections_active{container="hip-backoffice"}
+Mensagens Publicadas no RabbitMQ												rabbitmq_published_total{container="hip-backoffice"}
+Tamanho do Pool de Threads do Executor											executor_pool_size_threads{container="hip-backoffice"}
+Mensagens Rejeitadas no RabbitMQ												rabbitmq_rejected_total{container="hip-backoffice"}
+Novas Séries Criadas por Scrape													scrape_series_added{container="hip-backoffice"}
+Quantidade de Métricas Coletadas (Scrape)										scrape_samples_scraped{container="hip-backoffice"}
+Uso de Disco do Container														container_fs_usage_bytes{container="hip-backoffice"}
+Total de Probes Executados														prober_probe_total{container="hip-backoffice"}
+Taxa de I/O de Disco do Container												container_blkio_device_usage_total{container="hip-backoffice"}
+														
+

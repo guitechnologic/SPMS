@@ -1,0 +1,188 @@
+Você é um especialista em SRE e Observabilidade, Prometheus e Grafana 
+e precisa garantir estabilidade e previsibilidade a falhas do sistema.
+Analise a métrica abaixo e responda de forma clara, objetiva e prática:
+Métrica: scrape_series_added{container="inbound-hl7v2-router-container"}
+Explique: 
+Sugira um nome adequado para o gráfico no Grafana Forneça uma descrição curta e 
+objetiva do gráfico Informe a unidade correta a ser utilizada
+
+
+
+Dashboard: Spring Boot Observability
+Row: hl7v2
+
+Disponibilidade do Container									up{container="inbound-hl7v2-router-container"}				
+Reinicializações do Container                                   kube_pod_container_status_restarts_total{container="inbound-hl7v2-router-container"}
+Container Last Seen												time() - container_last_seen{container="inbound-hl7v2-router-container"}
+Uso de CPU do Container											rate(container_cpu_usage_seconds_total{container="inbound-hl7v2-router-container"}[5m])
+System CPU Usage												rate(system_cpu_usage{container="inbound-hl7v2-router-container"}[5m])
+Load Average (1m) do Nó                                         system_load_average_1m{container="inbound-hl7v2-router-container"}
+Quantidade de CPUs do Nó                                        system_cpu_count{container="inbound-hl7v2-router-container"}               
+Uso de Memória do Container                                     container_memory_working_set_bytes{container="inbound-hl7v2-router-container"}
+Pico Máximo de Memória do Container								container_memory_max_usage_bytes{container="inbound-hl7v2-router-container"}
+Eventos OOM do Container										increase(container_oom_events_total{container="inbound-hl7v2-router-container"}[5m])
+Falhas de Memória do Container									increase(container_memory_failures_total{container="inbound-hl7v2-router-container"}[5m])
+Memory Allocation Failures										container_memory_failcnt{container="inbound-hl7v2-router-container"}
+Uso de Memória da JVM (%)                                       100 * jvm_memory_used_bytes{container="inbound-hl7v2-router-container"} / jvm_memory_max_bytes{container="inbound-hl7v2-router-container"}
+Tempo em Pausa de GC											100 * rate(jvm_gc_pause_seconds_sum{container="inbound-hl7v2-router-container"}[5m])
+Dados Vivos da JVM após GC										jvm_gc_live_data_size_bytes{container="inbound-hl7v2-router-container"}
+Memória Total Alocada pela JVM									rate(jvm_gc_memory_allocated_bytes_total{container="inbound-hl7v2-router-container"}[5m])
+Threads Ativas da JVM											jvm_threads_live_threads{container="inbound-hl7v2-router-container"}
+Pico Máximo de Threads da JVM									jvm_threads_peak_threads{container="inbound-hl7v2-router-container"}
+JVM Daemon Threads												jvm_threads_daemon_threads{container="inbound-hl7v2-router-container"}
+Estados das Threads da JVM										jvm_threads_states_threads{container="inbound-hl7v2-router-container"}
+Total de Threads Criadas pela JVM								rate(jvm_threads_started_threads_total{container="inbound-hl7v2-router-container"}[5m])
+HTTP Requests per Second										rate(http_server_requests_seconds_count{container="inbound-hl7v2-router-container"}[1m])
+HTTP Max Response Time											http_server_requests_seconds_max{container="inbound-hl7v2-router-container"}
+HTTP Active Request Max Time									http_server_requests_active_seconds_max{container="inbound-hl7v2-router-container"}
+HTTP Active Requests Observation Count							rate(http_server_requests_active_seconds_sum{container="inbound-hl7v2-router-container"}[1m])
+Tarefas na Fila do Executor										executor_queued_tasks{container="inbound-hl7v2-router-container"}
+Executor Tasks Processed (5m Rate)								rate(executor_completed_tasks_total{container="inbound-hl7v2-router-container"}[5m])
+Executor Maximum Threads (Capped)								clamp_max(executor_pool_max_threads{container="inbound-hl7v2-router-container"}, 100)
+Limite Máximo de Conexões do HikariCP							hikaricp_connections_max{container="inbound-hl7v2-router-container"}
+Taxa de Timeout de Conexões										rate(hikaricp_connections_timeout_total{container="inbound-hl7v2-router-container"}[5m])
+Tempo Máximo de Criação de Conexão								hikaricp_connections_creation_seconds_max{container="inbound-hl7v2-router-container"}
+Conexões JDBC Ativas											jdbc_connections_active{container="inbound-hl7v2-router-container"}
+Conexões JDBC Ociosas											jdbc_connections_idle{container="inbound-hl7v2-router-container"}
+Taxa de Mensagens Rejeitadas – RabbitMQ							rate(rabbitmq_rejected_total{container="inbound-hl7v2-router-container"}[5m])
+Canais Ativos do RabbitMQ										rabbitmq_channels{container="inbound-hl7v2-router-container"}
+Uso de Disco do Container										container_fs_usage_bytes{container="inbound-hl7v2-router-container"}
+Limite de Disco do Container									container_fs_limit_bytes{container="inbound-hl7v2-router-container"}
+Inodes Livres do Container										container_fs_inodes_free{container="inbound-hl7v2-router-container"}
+Total de Inodes do Container									container_fs_inodes_total{container="inbound-hl7v2-router-container"}
+Uso de Disco dos Logs do Container								kubelet_container_log_filesystem_used_bytes{container="inbound-hl7v2-router-container"}
+Taxa de Eventos de Log da Aplicação								rate(logback_events_total{container="inbound-hl7v2-router-container"}[5m])
+Descritores de Arquivos Abertos									process_files_open_files{container="inbound-hl7v2-router-container"}
+Limite Máximo de Descritores de Arquivos						process_files_max_files{container="inbound-hl7v2-router-container"}
+Uptime do Processo da Aplicação									process_uptime_seconds{container="inbound-hl7v2-router-container"}
+Uso de CPU do Processo											process_cpu_usage{container="inbound-hl7v2-router-container"}
+Horário de Inicialização da Aplicação							application_started_time_seconds{container="inbound-hl7v2-router-container"}
+Total de Health Checks Executados								prober_probe_total{container="inbound-hl7v2-router-container"}
+Threads Ativas do Container										container_threads{container="inbound-hl7v2-router-container"}
+Processos Ativos no Container									container_processes{container="inbound-hl7v2-router-container"}
+Sockets de Rede Abertos no Container							container_sockets{container="inbound-hl7v2-router-container"}
+Ulimit Soft Configurado no Container							container_ulimits_soft{container="inbound-hl7v2-router-container"}
+Taxa de Leituras em Disco do Container							rate(container_fs_reads_total{container="inbound-hl7v2-router-container"}[5m])
+Uso de Memória de Buffers da JVM (Off-Heap)						jvm_buffer_memory_used_bytes{container="inbound-hl7v2-router-container"}
+Capacidade Total de Buffers da JVM (Off-Heap)					jvm_buffer_total_capacity_bytes{container="inbound-hl7v2-router-container"}
+Classes JVM Carregadas (Atuais)									jvm_classes_loaded_classes{container="inbound-hl7v2-router-container"}
+Sessões Ativas do Tomcat										tomcat_sessions_active_current_sessions{container="inbound-hl7v2-router-container"}
+Sessões Rejeitadas do Tomcat (Taxa)								rate(tomcat_sessions_rejected_sessions_total{container="inbound-hl7v2-router-container"}[5m])
+Duração do Scrape Prometheus									scrape_duration_seconds{container="inbound-hl7v2-router-container"}
+Número de Métricas Coletadas pelo Prometheus					scrape_samples_scraped{container="inbound-hl7v2-router-container"}
+Séries de Métricas Adicionadas no Scrape						scrape_series_added{container="inbound-hl7v2-router-container"}
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+
+Uso de Memória (MiB) por Container										sum(container_memory_usage_bytes{container="inbound-hl7v2-router-container"})
+Uso de CPU (cores) por Container										rate(container_cpu_usage_seconds_total{container="inbound-hl7v2-router-container"}[5m])
+Percentual de RAM referente ao  cluster									100 * sum(container_memory_working_set_bytes{container="inbound-hl7v2-router-container"}) / sum(machine_memory_bytes)
+Percentual de CPU referente ao  cluster									100 * sum(rate(container_cpu_usage_seconds_total{container="inbound-hl7v2-router-container"}[5m])) / sum(machine_cpu_cores)
+Tempo de Atividade da Aplicação 										process_uptime_seconds{container="inbound-hl7v2-router-container"}
+Horário de Início da Aplicação 											time() - process_start_time_seconds{container="inbound-hl7v2-router-container"}
+Tempo de médio Inicialização da Aplicação								application_started_time_seconds{container="inbound-hl7v2-router-container"}
+Requisições HTTP Recebidas 												sum(increase(http_server_requests_seconds_count{container="inbound-hl7v2-router-container"}[5m]))
+Disponibilidade do Serviço (UP) 										up{container="inbound-hl7v2-router-container"}
+Total de Endpoints Acessados 											count(http_server_requests_seconds_count{container="inbound-hl7v2-router-container"}) by (uri)
+Tempo Médio de Resposta HTTP 											sum(rate(http_server_requests_seconds_sum{container="inbound-hl7v2-router-container"}[5m])) / sum(rate(http_server_requests_seconds_count{container="inbound-hl7v2-router-container"}[5m]))
+Taxa de Sucesso de Requisições HTTP 									sum(increase(http_server_requests_seconds_count{status=~"2..", uri!="/actuator/prometheus", container="inbound-hl7v2-router-container"}[5m]))
+Requisições HTTP  														rate(http_server_requests_seconds_count{container="inbound-hl7v2-router-container"}[5m])
+Erros HTTP 5xx por Endpoint												sum(increase(http_server_requests_seconds_count{status=~"5..", uri!="/actuator/prometheus", container="inbound-hl7v2-router-container"}[5m]))
+Carga média do sistema (1 minuto) 										system_load_average_1m{container="inbound-hl7v2-router-container"}
+Uso de Disco (%)														100 * (1 - (disk_free_bytes / disk_total_bytes{container="inbound-hl7v2-router-container"}))
+Uso da CPU SpringBoot 													process_cpu_usage{container="inbound-hl7v2-router-container"} * 100
+Uso de CPU do processo 													100 * rate(process_cpu_time_ns_total{container="inbound-hl7v2-router-container"}[5m]) / 1e9 / system_cpu_count
+Uso de Heap JVM (% reservado)											100 * (jvm_memory_used_bytes{container="inbound-hl7v2-router-container", area="heap"} / jvm_memory_committed_bytes{area="heap"})
+Uso de Memória Heap (MB) 												jvm_memory_used_bytes{container="inbound-hl7v2-router-container", area="heap"} / 1024 / 1024
+Uso de Non-Heap JVM (% reservado)										100 * (jvm_memory_used_bytes{container="inbound-hl7v2-router-container", area="nonheap"} / jvm_memory_committed_bytes{area="nonheap"})
+tempo médio de pausa do Garbage Collector								rate(jvm_gc_pause_seconds_sum{container="inbound-hl7v2-router-container"}[5m]) / rate(jvm_gc_pause_seconds_count{container="inbound-hl7v2-router-container"}[5m])
+JVM Heap Usage After GC													jvm_memory_usage_after_gc{container="inbound-hl7v2-router-container", area="heap",pool="long-lived"} * 100
+GC Pause Duration Rate (Impacto do Garbage Collector) 					rate(jvm_gc_pause_seconds_sum{container="inbound-hl7v2-router-container"}[5m])
+Frequência de pausas do Garbage Collector (GC)							rate(jvm_gc_pause_seconds_count{container="inbound-hl7v2-router-container"}[5m])
+Maior Pausa do Garbage Collector 										jvm_gc_pause_seconds_max{container="inbound-hl7v2-router-container"}
+Capacidade Máxima de Memória por Área 									jvm_memory_max_bytes{container="inbound-hl7v2-router-container"}
+Taxa de alocação de memória da JVM 										rate(jvm_gc_memory_allocated_bytes_total{container="inbound-hl7v2-router-container" }[5m])
+Memória Usada por Buffers da JVM 										jvm_buffer_memory_used_bytes{container="inbound-hl7v2-router-container"} / 1024 / 1024
+Estados das Threads 													jvm_threads_states_threads{container="inbound-hl7v2-router-container"}
+Taxa de memória promovida ao heap velho 								rate(jvm_gc_memory_promoted_bytes_total{container="inbound-hl7v2-router-container"}[5m])
+Taxa de Criação de Threads 												rate(jvm_threads_started_threads_total{container="inbound-hl7v2-router-container"}[5m])
+Visão Geral de Threads da JVM											jvm_threads_live_threads{container=~"inbound-hl7v2-router-container"}|jvm_threads_daemon_threads{container="hip-backoffice"}|jvm_threads_peak_threads{container="hip-backoffice"}
+Total de Classes Descarregadas 											jvm_classes_unloaded_classes_total{container="inbound-hl7v2-router-container"}
+Tempo Total de Compilação JIT 											jvm_compilation_time_ms_total{container="inbound-hl7v2-router-container"}
+JVM Info - Ambiente e Versão											jvm_info{container="inbound-hl7v2-router-container"}
+Classes Java Carregadas 												jvm_classes_loaded_classes{container="inbound-hl7v2-router-container"}
+Capacidade Total dos Buffers da JVM 									jvm_buffer_total_capacity_bytes{container="inbound-hl7v2-router-container"} / 1024 / 1024
+Total de Sessões Criadas no Tomcat 										increase(tomcat_sessions_created_sessions_total{container="inbound-hl7v2-router-container"}[5m])
+Sessões Rejeitadas no Tomcat 											increase(tomcat_sessions_rejected_sessions_total{container="inbound-hl7v2-router-container"}[5m])
+Quantidade de Buffers da JVM											jvm_buffer_count_buffers{container="inbound-hl7v2-router-container"}
+Pico de Sessões Ativas no Tomcat										tomcat_sessions_active_max_sessions{container="inbound-hl7v2-router-container"}
+Tempo máximo de requisição ativa 										avg_over_time(http_server_requests_active_seconds_max{container="inbound-hl7v2-router-container"}[5m])
+Tempo Médio das Chamadas aos Repositórios Spring Data 					rate(spring_data_repository_invocations_seconds_sum{container="inbound-hl7v2-router-container"}[1m]) / rate(spring_data_repository_invocations_seconds_count{container="inbound-hl7v2-router-container"}[1m])
+Sessões HTTP Ativas no Tomcat											tomcat_sessions_active_current_sessions{container="inbound-hl7v2-router-container"}
+Sessões Expiradas no Tomcat 											increase(tomcat_sessions_expired_sessions_total{container="inbound-hl7v2-router-container"}[5m])
+Taxa de STATUS nos Repositórios Spring Data por Tipo de Exceção 		rate(spring_data_repository_invocations_seconds_count{container="inbound-hl7v2-router-container", state="ERROR"}[1m]) | rate(spring_data_repository_invocations_seconds_count{container="inbound-hl7v2-router-container", state="SUCCESS"}[1m])
+Taxa de Invocações dos Repositórios Spring Data 						sum by(repository, method, state) (rate(spring_data_repository_invocations_seconds_count{container="inbound-hl7v2-router-container"}[5m]))
+Tempo Máximo de Vida de Sessão HTTP no Tomcat							tomcat_sessions_alive_max_seconds{container="inbound-hl7v2-router-container"}
+Taxa de Requisições HTTP Ativas											rate(http_server_requests_active_seconds_count{container="inbound-hl7v2-router-container"}[5m])
+Executor Core Pool Size 												executor_pool_core_threads{container="inbound-hl7v2-router-container"}
+Executor Queue Remaining Capacity										executor_queue_remaining_tasks{container="inbound-hl7v2-router-container"}
+Tempo total de requisições ativas 										rate(http_server_requests_active_seconds_sum{container="inbound-hl7v2-router-container"}[5m])
+Tarefas Enfileiradas no Executor (5m)									avg_over_time(executor_queued_tasks{container="inbound-hl7v2-router-container"}[5m])
+Thread Pool Overview													executor_active_threads{job="hip-backoffice-svc"} |  executor_pool_size_threads{job="hip-backoffice-svc"} | executor_queued_tasks{job="hip-backoffice-svc"} | executor_queue_remaining_tasks{job="hip-backoffice-svc"}
+Tamanho Máximo do Pool de Threads (5m)									avg_over_time(executor_pool_max_threads{container="inbound-hl7v2-router-container"}[5m])
+Volume Total de Requisições com Sucesso vs. Erro						http_server_requests_seconds_count{container="inbound-hl7v2-router-container"}
+Taxa STATUS nos Repositórios Spring Data 								rate(spring_data_repository_invocations_seconds_count{container="inbound-hl7v2-router-container", state="ERROR"}[1m])| rate(spring_data_repository_invocations_seconds_count{container="inbound-hl7v2-router-container", state="SUCCESS"}[1m])
+Tempo Total para Aquisição de Conexões									avg_over_time(hikaricp_connections_acquire_seconds_sum{container="inbound-hl7v2-router-container"}[5m])
+Tempo Máximo de Criação de Conexão HikariCP (média 5m)					avg_over_time(hikaricp_connections_creation_seconds_max{container="inbound-hl7v2-router-container"}[5m])
+Taxa de Invocações de Repositórios Spring Data							sum by(repository, method, state) (rate(spring_data_repository_invocations_seconds_count{container="inbound-hl7v2-router-container"}[1m]))
+Tempo Total Gasto por Método (por segundo) 								sum by(repository, method) (rate(spring_data_repository_invocations_seconds_sum{container="inbound-hl7v2-router-container"}[1m]))
+Limite máximo de conexões (HikariCP)									avg_over_time(hikaricp_connections_max{container="inbound-hl7v2-router-container"}[5m])
+Timeouts ao Obter Conexões (HikariCP)									increase(hikaricp_connections_timeout_total{container="inbound-hl7v2-router-container"}[5m])
+Top 5 Repositórios com Maior Latência Média								topk(5, rate(spring_data_repository_invocations_seconds_sum{container="inbound-hl7v2-router-container"}[1m]) / rate(spring_data_repository_invocations_seconds_count{container="inbound-hl7v2-router-container"}[1m]))
+Total Completed Executor Tasks											increase(executor_completed_tasks_total{container="inbound-hl7v2-router-container"}[1m])
+Tempo Total de Uso das Conexões (HikariCP)								avg_over_time(hikaricp_connections_usage_seconds_sum{container="inbound-hl7v2-router-container"}[5m])
+Conexões JDBC Ativas													avg_over_time(jdbc_connections_idle{container="inbound-hl7v2-router-container"}[5m])
+Active Threads in Executor												executor_active_threads{container="inbound-hl7v2-router-container"}
+Log Events by Level														increase(logback_events_total{container="inbound-hl7v2-router-container"}[5m])
+Tamanho Atual dos Dados Vivos na Heap (JVM)								avg_over_time(jvm_gc_live_data_size_bytes{container="inbound-hl7v2-router-container"}[5m])
+Executor Pool Size (Current)											executor_pool_size_threads{container="inbound-hl7v2-router-container"}
+Executor Max Pool Size													executor_pool_max_threads{container="inbound-hl7v2-router-container"}
+Tamanho Médio do Pool Core de Threads (5m)								avg_over_time(executor_pool_core_threads{container="inbound-hl7v2-router-container"}[5m])
+Memória Committed da JVM (Bytes)										avg_over_time(jvm_memory_committed_bytes{container="inbound-hl7v2-router-container"}[5m])
+Limite Máximo de Arquivos Abertos pelo Processo							avg_over_time(process_files_max_files{container="inbound-hl7v2-router-container"}[5m])
+Executor Queued Tasks 													executor_queued_tasks{container="inbound-hl7v2-router-container"}
+Criações de Conexões HikariCP (média 5m)								rate(hikaricp_connections_creation_seconds_count{container="inbound-hl7v2-router-container"}[5m])
+Capacidade Restante da Fila do Executor (5m)							avg_over_time(executor_queue_remaining_tasks{container="inbound-hl7v2-router-container"}[5m])
+Tempo Máximo para Aquisição de Conexão (HikariCP)						avg_over_time(hikaricp_connections_acquire_seconds_max{container="inbound-hl7v2-router-container"}[5m])
+Tarefas Concluídas pelo Executor (Taxa - 5m)							rate(executor_completed_tasks_total{container="inbound-hl7v2-router-container"}[5m])
+Tempo Máximo de Uso de Conexão (HikariCP)								avg_over_time(hikaricp_connections_usage_seconds_max{container="inbound-hl7v2-router-container"}[5m])
+Conexões inativas no pool (HikariCP)									avg_over_time(hikaricp_connections_idle{container="inbound-hl7v2-router-container"}[5m])
+Conexões pendentes no pool (HikariCP)									avg_over_time(hikaricp_connections_pending{container="inbound-hl7v2-router-container"}[5m])
+Tamanho Atual do Pool de Threads (5m)									avg_over_time(executor_pool_size_threads{container="inbound-hl7v2-router-container"}[5m])
+Sobrecarga do Garbage Collector (GC) da JVM								avg_over_time(jvm_gc_overhead{container="inbound-hl7v2-router-container"}[5m])
+Conexões JDBC Ativas													avg_over_time(jdbc_connections_active{container="inbound-hl7v2-router-container"}[5m])
+Número Mínimo de Conexões JDBC Configuradas								avg_over_time(jdbc_connections_min{container="inbound-hl7v2-router-container"}[5m])
+Aquisições de Conexões HikariCP (5m)									rate(hikaricp_connections_acquire_seconds_count{container="inbound-hl7v2-router-container"}[5m])
+Timeouts ao Obter Conexões HikariCP 									increase(hikaricp_connections_timeout_total{container="inbound-hl7v2-router-container"}[5m])
+Taxa de Eventos de Log por Segundo										rate(logback_events_total{container="inbound-hl7v2-router-container"}[5m])
+Uso de CPU do Sistema													avg_over_time(system_cpu_usage{container="inbound-hl7v2-router-container"}[5m])
+Tempo total de criação de conexões (HikariCP)							rate(hikaricp_connections_creation_seconds_sum{container="inbound-hl7v2-router-container"}[5m])
+Conexões mínimas no pool (HikariCP)										avg_over_time(hikaricp_connections_min{container="inbound-hl7v2-router-container"}[5m])
+Threads JVM Ativas – HL7v2												jvm_threads_live_threads{container="inbound-hl7v2-router-container"}
+Conexões Ativas no HikariCP												avg_over_time(hikaricp_connections_active{container="inbound-hl7v2-router-container"}[5m])
+Número Máximo de Conexões JDBC Permitidas								avg_over_time(jdbc_connections_max{container="inbound-hl7v2-router-container"}[5m])
+Capacidade Máxima de Dados Vivos na Heap (JVM)							avg_over_time(jvm_gc_max_data_size_bytes{container="inbound-hl7v2-router-container"}[5m])
+Quantidade de Conexões Utilizadas (HikariCP)							increase(hikaricp_connections_usage_seconds_count{container="inbound-hl7v2-router-container"}[5m])
+Total de Conexões no Pool (HikariCP)									avg_over_time(hikaricp_connections{container="inbound-hl7v2-router-container"}[5m])
+Arquivos Abertos pelo Processo											avg_over_time(process_files_open_files{container="inbound-hl7v2-router-container"}[5m])
+Conexões Pendentes no HikariCP											hikaricp_connections_pending{container="inbound-hl7v2-router-container"}
+Memória Máxima Configurada da JVM (Bytes)								avg_over_time(jvm_memory_max_bytes{container="inbound-hl7v2-router-container"}[5m])
+Taxa de Requisições para /actuator/health								http_server_requests_seconds_count{container="inbound-hl7v2-router-container"}
+Uso de Heap JVM (%) – HL7v2												100 * (jvm_memory_used_bytes{container="inbound-hl7v2-router-container", area="heap"}/jvm_memory_max_bytes{container="inbound-hl7v2-router-container", area="heap"})
+Carga Média do Sistema (1 min) – HL7v2									system_load_average_1m{container="inbound-hl7v2-router-container"}
+Quantidade de Pausas de GC – HL7v2										jvm_gc_pause_seconds_count{container="inbound-hl7v2-router-container"}
+Tempo Total de Pausa do GC – HL7v2										jvm_gc_pause_seconds_sum{container="inbound-hl7v2-router-container"}
+
