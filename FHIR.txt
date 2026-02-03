@@ -1,271 +1,161 @@
-Você é um especialista em SRE e Observabilidade, Prometheus e Grafana 
-e precisa garantir estabilidade e previsibilidade a falhas do sistema.
-Analise a métrica abaixo e responda de forma clara, objetiva e prática:
-Métrica: scrape_series_added{container="inbound-fhir-router-container"}
-Explique: 
-Sugira um nome adequado para o gráfico no Grafana Forneça uma descrição curta e 
-objetiva do gráfico Informe a unidade correta a ser utilizada
-
-
-
-
-Dashboard: Spring Boot Observability
-Row: Fhir
-
-
-Container Up Status																				up{container="inbound-fhir-router-container"}
-Container Restarts Total																		kube_pod_container_status_restarts_total{container="inbound-fhir-router-container"}
-Último Sinal do Container																		time() - container_last_seen{container="inbound-fhir-router-container"}
-Container Waiting 																			    kube_pod_container_status_waiting{container="inbound-fhir-router-container"}
-Container CPU Consumption																		rate(container_cpu_usage_seconds_total{container="inbound-fhir-router-container"}[5m]) 
-System CPU Usage (%)                       														system_cpu_usage{container="inbound-fhir-router-container"}
-System Load Average (1m)         																system_load_average_1m{container="inbound-fhir-router-container"}
-System CPU Core Count																			system_cpu_count{container="inbound-fhir-router-container"}
-Total Memory Usage																				container_memory_usage_bytes{container="inbound-fhir-router-container"}
-Container Max Memory Usage																		container_memory_max_usage_bytes{container="inbound-fhir-router-container"}
-Container OOM Kill Events                                                                       increase(container_oom_events_total{container="inbound-fhir-router-container"}[5m]) 
-Container Memory Allocation Failures															increase(container_memory_failures_total{container="inbound-fhir-router-container"}[5m]) > 0
-Container Memory Limit Hits                                             						container_memory_failcnt{container="inbound-fhir-router-container"}
-JVM Heap Utilization																			100 * jvm_memory_used_bytes{area="heap",container="inbound-fhir-router-container"}/jvm_memory_max_bytes{area="heap",container="inbound-fhir-router-container",} and jvm_memory_max_bytes{area="heap",container="inbound-fhir-router-container"} > 0
-JVM GC Overhead (%)																				avg_over_time( jvm_gc_overhead{container="inbound-fhir-router-container"}[5m]) 
-JVM GC Pause Time (s/s)																			rate(jvm_gc_pause_seconds_sum{container="inbound-fhir-router-container"}[5m])
-Live Heap Size After GC																			increase(jvm_gc_live_data_size_bytes{container="inbound-fhir-router-container"}[30m]) 
-JVM Allocated Memory (Total)																	rate(jvm_gc_memory_allocated_bytes_total{container="inbound-fhir-router-container"}[5m])
-JVM Memory Promotion (Total)																	rate(jvm_gc_memory_promoted_bytes_total{container="inbound-fhir-router-container"}[5m])
-JVM Live Threads																				deriv(jvm_threads_live_threads{container="inbound-fhir-router-container"}[10m]) 
-Maximum JVM Threads																				jvm_threads_live_threads{container="inbound-fhir-router-container"}
-JVM – Threads Daemon Ativas                                                                     jvm_threads_daemon_threads{container="inbound-fhir-router-container"}
-JVM – Distribuição de Threads por Estado														jvm_threads_states_threads{container="inbound-fhir-router-container"}
-JVM – Threads Criadas (Total)																	rate(jvm_threads_started_threads_total[5m])
-HTTP – Requisições por Segundo (RPS)															rate(http_server_requests_seconds_count[5m])
-HTTP – Latência Máxima Observada																http_server_requests_seconds_max{container="inbound-fhir-router-container"}
-HTTP – Tempo Máximo de Requisição Ativa															http_server_requests_active_seconds_max{container="inbound-fhir-router-container"}
-HTTP – Contador de Observações de Requisições Ativas											http_server_requests_active_seconds_count{container="inbound-fhir-router-container"}
-HikariCP – Conexões Ativas																		hikaricp_connections_active{container="inbound-fhir-router-container"}
-HikariCP – Conexões Ociosas                                                                     hikaricp_connections_idle{container="inbound-fhir-router-container"}
-HikariCP – Conexões Pendentes                                                                   hikaricp_connections_pending{container="inbound-fhir-router-container"}
-HikariCP – Máximo de Conexões Configurado														hikaricp_connections_active / hikaricp_connections_max
-HikariCP – Taxa de Timeout de Conexões															rate(hikaricp_connections_timeout_total[1m])
-JDBC – Conexões Ativas																			jdbc_connections_active{container="inbound-fhir-router-container"}
-JDBC – Conexões Ociosas																			jdbc_connections_idle{container="inbound-fhir-router-container"}
-JDBC – Máximo de Conexões Configurado                                                           jdbc_connections_max{container="inbound-fhir-router-container"}
-Executor – Tarefas na Fila																		executor_queued_tasks{container="inbound-fhir-router-container"}
-Executor – Capacidade Restante da Fila															executor_queue_remaining_tasks{container="inbound-fhir-router-container"}
-Executor – Máximo de Threads Configurado														executor_active_threads / executor_pool_max_threads
-Container – Uso de Disco																		container_fs_usage_bytes{container="inbound-fhir-router-container"}
-Container – Limite de Disco Disponível															container_fs_limit_bytes{container="inbound-fhir-router-container"}
-Container – Inodes Livres																		container_fs_inodes_free{container="inbound-fhir-router-container"}
-Container – Total de Inodes																		container_fs_inodes_total{container="inbound-fhir-router-container"}
-Container – Uso de Disco por Logs																kubelet_container_log_filesystem_used_bytes{container="inbound-fhir-router-container"}
-Aplicação – Taxa de Geração de Logs																sum by (level) ( rate(logback_events_total{container="inbound-fhir-router-container"}[5m]))
-Processo – Arquivos Abertos (FDs)																process_files_open_files{container="inbound-fhir-router-container"}
-Processo – Limite Máximo de Arquivos (FDs)														process_files_open_files / process_files_max_files * 100
-Processo – Tempo em Execução (Uptime)															process_uptime_seconds{container="inbound-fhir-router-container"}
-Processo – Uso de CPU																			process_cpu_usage{container="inbound-fhir-router-container"}
-Aplicação – Data/Hora de Inicialização															application_started_time_seconds{container="inbound-fhir-router-container"}
-Aplicação – Tempo para Prontidão (Startup Time)													application_ready_time_seconds{container="inbound-fhir-router-container"}
-Kubernetes – Total de Health Checks Executados													rate(prober_probe_total{container="inbound-fhir-router-container"}[5m])
-Kubernetes – Latência Média dos Health Checks													rate(prober_probe_duration_seconds_sum{container="inbound-fhir-router-container"}[5m]) /rate(prober_probe_duration_seconds_count{container="inbound-fhir-router-container"}[5m])
-Kubernetes – Execuções de Health Checks															rate(prober_probe_duration_seconds_count{container="inbound-fhir-router-container"}[5m])
-Container – Threads Ativas																		container_threads{container="inbound-fhir-router-container"}
-Container – Processos em Execução																container_processes{container="inbound-fhir-router-container"}
-Container – Sockets Abertos																		container_sockets{container="inbound-fhir-router-container"}
-Container – Limites de Recursos (Ulimit Soft)													container_ulimits_soft{container="inbound-fhir-router-container"}
-Container – Operações de Leitura em Disco														rate(container_fs_reads_total{container="inbound-fhir-router-container"}[5m])
-Container – Operações de Escrita em Disco														rate(container_fs_writes_total{container="inbound-fhir-router-container"}[5m])
-Container – Uso Total de I/O em Disco (Block I/O)												rate(container_blkio_device_usage_total{container="inbound-fhir-router-container"}[5m])
-JVM – Memória de Buffers em Uso																	jvm_buffer_memory_used_bytes{container="inbound-fhir-router-container"}
-JVM – Capacidade Total de Buffers																jvm_buffer_total_capacity_bytes{container="inbound-fhir-router-container"}
-JVM – Classes Carregadas																		jvm_classes_loaded_classes{container="inbound-fhir-router-container"}
-JVM – Tempo Total de Compilação JIT																rate(jvm_compilation_time_ms_total{container="inbound-fhir-router-container"}[5m])
-Tomcat – Pico de Sessões Ativas																	tomcat_sessions_active_max_sessions{container="inbound-fhir-router-container"}
-Tomcat – Sessões Expiradas (Total)																rate(tomcat_sessions_expired_sessions_total{container="inbound-fhir-router-container"}[5m])
-Tomcat – Sessões Rejeitadas (Total)																rate(tomcat_sessions_rejected_sessions_total{container="inbound-fhir-router-container"}[5m])
-Prometheus – Duração de Scrape do Container														scrape_duration_seconds{container="inbound-fhir-router-container"}
-Prometheus – Métricas Coletadas por Scrape														scrape_samples_scraped{container="inbound-fhir-router-container"}
-Prometheus – Séries Adicionadas por Scrape														rate(scrape_series_added{container="inbound-fhir-router-container"}[5m])
-
-
-
-
-
---------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-
-Uso de Memória (MiB) por Container										sum(container_memory_usage_bytes{container="inbound-fhir-router-container"})
-Uso de CPU (cores) por Container										rate(container_cpu_usage_seconds_total{container="inbound-fhir-router-container"}[5m])
-Percentual de RAM referente ao  cluster									100 * sum(container_memory_working_set_bytes{container="inbound-fhir-router-container"}) / sum(machine_memory_bytes)
-Percentual de CPU referente ao  cluster									100 * sum(rate(container_cpu_usage_seconds_total{container="inbound-fhir-router-container"}[5m])) / sum(machine_cpu_cores)
-Disponibilidade do Serviço (UP) 										up{container="inbound-fhir-router-container"}
-Total de Endpoints Acessados 											count(http_server_requests_seconds_count{container="inbound-fhir-router-container"}) by (uri)
-Tempo de Atividade da Aplicação 										process_uptime_seconds{container="inbound-fhir-router-container"}
-Tempo de médio Inicialização da Aplicação								application_started_time_seconds{container="inbound-fhir-router-container"}
-Requisições HTTP Recebidas 												sum(increase(http_server_requests_seconds_count{container="inbound-fhir-router-container"}[5m]))
-Horário de Início da Aplicação 											time() - process_start_time_seconds{container="inbound-fhir-router-container"}
-Requisições HTTP  														rate(http_server_requests_seconds_count{container="inbound-fhir-router-container"}[5m])
-Tempo Médio de Resposta HTTP											sum(rate(http_server_requests_seconds_sum{container="inbound-fhir-router-container"}[5m])) / sum(rate(http_server_requests_seconds_count{container="inbound-fhir-router-container"}[5m]))
-Taxa de Sucesso de Requisições HTTP 									sum(increase(http_server_requests_seconds_count{status=~"2..", uri!="/actuator/prometheus", container="inbound-fhir-router-container"}[5m]))
-Erros HTTP 4xx															sum(increase(http_server_requests_seconds_count{status=~"4..",uri!="actuator/prometheus",container="inbound-fhir-router-container"}[5m]))
-Erros HTTP 5xx por Endpoint												sum(increase(http_server_requests_seconds_count{status=~"5..", uri!="/actuator/prometheus", container="inbound-fhir-router-container"}[5m]))
-Uso da CPU SpringBoot 													process_cpu_usage{container="inbound-fhir-router-container"} * 100
-Uso de CPU do processo 													100 * rate(process_cpu_time_ns_total{container="inbound-fhir-router-container"}[5m]) / 1e9 / system_cpu_count
-Uso de Disco (%)														100 * (1 - (disk_free_bytes / disk_total_bytes{container="inbound-fhir-router-container"}))
-Carga média do sistema (1 minuto) 										system_load_average_1m{container="inbound-fhir-router-container"}
-Uso de Memória Heap (MB) 												jvm_memory_used_bytes{container="inbound-fhir-router-container", area="heap"} / 1024 / 1024
-Uso de Memória Non-Heap (MB) 											jvm_memory_used_bytes{container="inbound-fhir-router-container",area="nonheap"} / 1024 / 1024
-Uso de Heap JVM (% reservado)											100 * (jvm_memory_used_bytes{container="inbound-fhir-router-container", area="heap"} / jvm_memory_committed_bytes{area="heap"})
-Uso de Non-Heap JVM (% reservado)										100 * (jvm_memory_used_bytes{container="inbound-fhir-router-container", area="nonheap"} / jvm_memory_committed_bytes{area="nonheap"})
-Capacidade Máxima de Memória por Área 									jvm_memory_max_bytes{container="inbound-fhir-router-container"}
-JVM Heap Usage After GC													jvm_memory_usage_after_gc{container="inbound-fhir-router-container", area="heap",pool="long-lived"} * 100
-Frequência de pausas do Garbage Collector (GC)							rate(jvm_gc_pause_seconds_count{container="inbound-fhir-router-container"}[5m])
-tempo médio de pausa do Garbage Collector								rate(jvm_gc_pause_seconds_sum{container="inbound-fhir-router-container"}[5m]) / rate(jvm_gc_pause_seconds_count{container="inbound-fhir-router-container"}[5m])
-GC Pause Duration Rate (Impacto do Garbage Collector) 					rate(jvm_gc_pause_seconds_sum{container="inbound-fhir-router-container"}[5m])
-Memória Usada por Buffers da JVM 										jvm_buffer_memory_used_bytes{container="inbound-fhir-router-container"} / 1024 / 1024
-Maior Pausa do Garbage Collector 										jvm_gc_pause_seconds_max{container="inbound-fhir-router-container"}
-Taxa de memória promovida ao heap velho 								rate(jvm_gc_memory_promoted_bytes_total{container="inbound-fhir-router-container"}[5m])
-Taxa de alocação de memória da JVM 										rate(jvm_gc_memory_allocated_bytes_total{container="inbound-fhir-router-container" }[5m])
-Visão Geral de Threads da JVM 											jvm_threads_live_threads{container=~"inbound-fhir-router-container"} | jvm_threads_daemon_threads{container="hip-backoffice"} | jvm_threads_peak_threads{container="hip-backoffice"}
-Estados das Threads 													jvm_threads_states_threads{container="inbound-fhir-router-container"}
-Taxa de Criação de Threads 												rate(jvm_threads_started_threads_total{container="inbound-fhir-router-container"}[5m])
-Classes Java Carregadas 												jvm_classes_loaded_classes{container="inbound-fhir-router-container"}
-Total de Classes Descarregadas 											jvm_classes_unloaded_classes_total{container="inbound-fhir-router-container"}
-Tempo Total de Compilação JIT 											jvm_compilation_time_ms_total{container="inbound-fhir-router-container"}
-Quantidade de Buffers da JVM											jvm_buffer_count_buffers{container="inbound-fhir-router-container"}
-Capacidade Total dos Buffers da JVM 									jvm_buffer_total_capacity_bytes{container="inbound-fhir-router-container"} / 1024 / 1024
-JVM Info - Ambiente e Versão											jvm_info{container="inbound-fhir-router-container"}
-Sessões HTTP Ativas no Tomcat											tomcat_sessions_active_current_sessions{container="inbound-fhir-router-container"}
-Pico de Sessões Ativas no Tomcat										tomcat_sessions_active_max_sessions{container="inbound-fhir-router-container"}
-Total de Sessões Criadas no Tomcat 										increase(tomcat_sessions_created_sessions_total{container="inbound-fhir-router-container"}[5m])
-Tempo Máximo de Vida de Sessão HTTP no Tomcat							tomcat_sessions_alive_max_seconds{container="inbound-fhir-router-container"}
-Sessões Expiradas no Tomcat 											increase(tomcat_sessions_expired_sessions_total{container="inbound-fhir-router-container"}[5m])
-Sessões Rejeitadas no Tomcat 											increase(tomcat_sessions_rejected_sessions_total{container="inbound-fhir-router-container"}[5m])
-Tempo total de requisições ativas 										rate(http_server_requests_active_seconds_sum{container="inbound-fhir-router-container"}[5m])
-Taxa de Requisições HTTP Ativas											rate(http_server_requests_active_seconds_count{container="inbound-fhir-router-container"}[5m])
-Tempo máximo de requisição ativa 										avg_over_time(http_server_requests_active_seconds_max{container="inbound-fhir-router-container"}[5m])
-Volume Total de Requisições com Sucesso vs. Erro						rate(http_server_requests_seconds_count{container="inbound-fhir-router-container"}[5m])
-Tempo Médio das Chamadas aos Repositórios Spring Data 					rate(spring_data_repository_invocations_seconds_sum{container="inbound-fhir-router-container"}[1m]) / rate(spring_data_repository_invocations_seconds_count{container="inbound-fhir-router-container"}[1m])
-Taxa de Invocações de Repositórios Spring Data							sum by(repository, method, state) (rate(spring_data_repository_invocations_seconds_count{container="inbound-fhir-router-container"}[1m]))
-Taxa STATUS nos Repositórios Spring Data 								rate(spring_data_repository_invocations_seconds_count{container="inbound-fhir-router-container", state="ERROR"}[1m]) | rate(spring_data_repository_invocations_seconds_count{container="inbound-fhir-router-container", state="SUCCESS"}[1m])
-Taxa de STATUS nos Repositórios Spring Data por Tipo de Exceção			rate(spring_data_repository_invocations_seconds_count{container="inbound-fhir-router-container", state="ERROR"}[1m]) | rate(spring_data_repository_invocations_seconds_count{container="inbound-fhir-router-container", state="SUCCESS"}[1m])
-Top 5 Repositórios com Maior Latência Média								topk(5, rate(spring_data_repository_invocations_seconds_sum{container="inbound-fhir-router-container"}[1m]) / rate(spring_data_repository_invocations_seconds_count{container="inbound-fhir-router-container"}[1m]))
-Tempo Total Gasto por Método (por segundo) 								sum by(repository, method) (rate(spring_data_repository_invocations_seconds_sum{container="inbound-fhir-router-container"}[1m]))
-Taxa de Invocações dos Repositórios Spring Data 						sum by(repository, method, state) (rate(spring_data_repository_invocations_seconds_count{container="inbound-fhir-router-container"}[5m]))
-Active Threads in Executor												executor_active_threads{container="inbound-fhir-router-container"}
-Total Completed Executor Tasks											increase(executor_completed_tasks_total{container="inbound-fhir-router-container"}[1m])
-Executor Core Pool Size 												executor_pool_core_threads{container="inbound-fhir-router-container"}
-Executor Max Pool Size													executor_pool_max_threads{container="inbound-fhir-router-container"}
-Executor Pool Size (Current)											executor_pool_size_threads{container="inbound-fhir-router-container"}
-Executor Queue Remaining Capacity										executor_queue_remaining_tasks{container="inbound-fhir-router-container"}
-Executor Queued Tasks 													executor_queued_tasks{container="inbound-fhir-router-container"}
-Log Events by Level														increase(logback_events_total{container="inbound-fhir-router-container"}[5m])
-Thread Pool Overview													executor_active_threads{job="hip-backoffice-svc"} | executor_pool_size_threads{job="hip-backoffice-svc"} | executor_queued_tasks{job="hip-backoffice-svc"} | executor_queue_remaining_tasks{job="hip-backoffice-svc"}
-Tarefas Concluídas pelo Executor (Taxa - 5m)							rate(executor_completed_tasks_total{container="inbound-fhir-router-container"}[5m])
-Tamanho Médio do Pool Core de Threads (5m)								avg_over_time(executor_pool_core_threads{container="inbound-fhir-router-container"}[5m])
-Tamanho Máximo do Pool de Threads (5m)									avg_over_time(executor_pool_max_threads{container="inbound-fhir-router-container"}[5m])
-Tamanho Atual do Pool de Threads (5m)									avg_over_time(executor_pool_size_threads{container="inbound-fhir-router-container"}[5m])
-Capacidade Restante da Fila do Executor (5m)							avg_over_time(executor_queue_remaining_tasks{container="inbound-fhir-router-container"}[5m])
-Tarefas Enfileiradas no Executor (5m)									avg_over_time(executor_queued_tasks{container="inbound-fhir-router-container"}[5m])
-Aquisições de Conexões HikariCP (5m)									rate(hikaricp_connections_acquire_seconds_count{container="inbound-fhir-router-container"}[5m])
-Tempo Máximo para Aquisição de Conexão (HikariCP)						avg_over_time(hikaricp_connections_acquire_seconds_max{container="inbound-fhir-router-container"}[5m])
-Tempo Total para Aquisição de Conexões (HikariCP)						avg_over_time(hikaricp_connections_acquire_seconds_sum{container="inbound-fhir-router-container"}[5m])
-Conexões Ativas no HikariCP												avg_over_time(hikaricp_connections_active{container="inbound-fhir-router-container"}[5m])
-Criações de Conexões HikariCP (média 5m)								rate(hikaricp_connections_creation_seconds_count{container="inbound-fhir-router-container"}[5m])
-Tempo Máximo de Criação de Conexão HikariCP (média 5m)					avg_over_time(hikaricp_connections_creation_seconds_max{container="inbound-fhir-router-container"}[5m])
-Tempo total de criação de conexões (HikariCP)							rate(hikaricp_connections_creation_seconds_sum{container="inbound-fhir-router-container"}[5m])
-Conexões inativas no pool (HikariCP)									avg_over_time(hikaricp_connections_idle{container="inbound-fhir-router-container"}[5m])
-Limite máximo de conexões (HikariCP)									avg_over_time(hikaricp_connections_max{container="inbound-fhir-router-container"}[5m])
-Conexões mínimas no pool (HikariCP)										avg_over_time(hikaricp_connections_min{container="inbound-fhir-router-container"}[5m])
-Conexões pendentes no pool (HikariCP)									avg_over_time(hikaricp_connections_pending{container="inbound-fhir-router-container"}[5m])
-Timeouts ao Obter Conexões (HikariCP)									increase(hikaricp_connections_timeout_total{container="inbound-fhir-router-container"}[5m])
-Quantidade de Conexões Utilizadas (HikariCP)							increase(hikaricp_connections_usage_seconds_count{container="inbound-fhir-router-container"}[5m])
-Tempo Máximo de Uso de Conexão (HikariCP)								avg_over_time(hikaricp_connections_usage_seconds_max{container="inbound-fhir-router-container"}[5m])
-Tempo Total de Uso das Conexões (HikariCP)								avg_over_time(hikaricp_connections_usage_seconds_sum{container="inbound-fhir-router-container"}[5m])
-Total de Conexões no Pool (HikariCP)									avg_over_time(hikaricp_connections{container="inbound-fhir-router-container"}[5m])
-Conexões JDBC Ativas													avg_over_time(jdbc_connections_active{container="inbound-fhir-router-container"}[5m])
-Conexões JDBC 													        avg_over_time(jdbc_connections_idle{container="inbound-fhir-router-container"}[5m])
-Número Máximo de Conexões JDBC Permitidas								avg_over_time(jdbc_connections_max{container="inbound-fhir-router-container"}[5m])
-Número Mínimo de Conexões JDBC Configuradas								avg_over_time(jdbc_connections_min{container="inbound-fhir-router-container"}[5m])
-Tamanho Atual dos Dados Vivos na Heap (JVM)								avg_over_time(jvm_gc_live_data_size_bytes{container="inbound-fhir-router-container"}[5m])
-Capacidade Máxima de Dados Vivos na Heap (JVM)							avg_over_time(jvm_gc_max_data_size_bytes{container="inbound-fhir-router-container"}[5m])
-Sobrecarga do Garbage Collector (GC) da JVM								avg_over_time(jvm_gc_overhead{container="inbound-fhir-router-container"}[5m])
-Memória Committed da JVM (Bytes)										avg_over_time(jvm_memory_committed_bytes{container="inbound-fhir-router-container"}[5m])
-Memória Máxima Configurada da JVM (Bytes)								avg_over_time(jvm_memory_max_bytes{container="inbound-fhir-router-container"}[5m])
-Taxa de Eventos de Log por Segundo										rate(logback_events_total{container="inbound-fhir-router-container"}[5m])
-Limite Máximo de Arquivos Abertos pelo Processo							avg_over_time(process_files_max_files{container="inbound-fhir-router-container"}[5m])
-Arquivos Abertos pelo Processo											avg_over_time(process_files_open_files{container="inbound-fhir-router-container"}[5m])
-Uso de CPU do Sistema													avg_over_time(system_cpu_usage{container="inbound-fhir-router-container"}[5m])
-Taxa de Requisições para /actuator/health – FHIR						http_server_requests_seconds_count{container="inbound-fhir-router-container"}
-Conexões Pendentes no HikariCP (FHIR Router)							hikaricp_connections_pending{container="inbound-fhir-router-container"}
-Timeouts ao Obter Conexões HikariCP (FHIR Router)						increase(hikaricp_connections_timeout_total{container="inbound-fhir-router-container"}[5m])
-Sessões HTTP Ativas (Tomcat)											tomcat_sessions_active_current_sessions{container="inbound-fhir-router-container"}
-Pico de Sessões no Tomcat												tomcat_sessions_active_max_sessions{container="inbound-fhir-router-container"}
-Total de Sessões Criadas												tomcat_sessions_created_sessions_total{container="inbound-fhir-router-container"}
-Uso de Memória Direct Buffer											jvm_buffer_memory_used_bytes{container="inbound-fhir-router-container", id="direct"}
-Capacidade Total Direct Buffer											jvm_buffer_total_capacity_bytes{container="inbound-fhir-router-container", id="direct"}
-Volume de Requisições por Status										rate(http_server_requests_seconds_count{container="inbound-fhir-router-container"}[5m])
-Limite de Arquivos Abertos												avg_over_time(process_files_max_files{container="inbound-fhir-router-container"}[5m])
-
-
-  					
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Indice	Prioridade	Nome	Query
+1	1	 Container Up Status 	 up{container="inbound-fhir-router-container"}
+2	1	 Container Restarts Total 	 kube_pod_container_status_restarts_total{container="inbound-fhir-router-container"}
+3	1	 Último Sinal do Container 	 time() - container_last_seen{container="inbound-fhir-router-container"}
+4	1	 Container Waiting 	 kube_pod_container_status_waiting{container="inbound-fhir-router-container"}
+11	1	 Container OOM Kill Events 	 increase(container_oom_events_total{container="inbound-fhir-router-container"}[5m])
+12	1	 Container Memory Allocation Failures 	 increase(container_memory_failures_total{container="inbound-fhir-router-container"}[5m]) > 0
+13	1	 Container Memory Limit Hits 	 container_memory_failcnt{container="inbound-fhir-router-container"}
+48	1	 Processo – Tempo em Execução (Uptime) 	 process_uptime_seconds{container="inbound-fhir-router-container"}
+50	1	 Aplicação – Data/Hora de Inicialização 	 application_started_time_seconds{container="inbound-fhir-router-container"}
+51	1	 Aplicação – Tempo para Prontidão (Startup Time) 	 application_ready_time_seconds{container="inbound-fhir-router-container"}
+52	1	 Kubernetes – Total de Health Checks Executados 	 rate(prober_probe_total{container="inbound-fhir-router-container"}[5m])
+53	1	 Kubernetes – Latência Média dos Health Checks 	 rate(prober_probe_duration_seconds_sum{container="inbound-fhir-router-container"}[5m]) / rate(prober_probe_duration_seconds_count{container="inbound-fhir-router-container"}[5m])
+54	1	 Kubernetes – Execuções de Health Checks 	 rate(prober_probe_duration_seconds_count{container="inbound-fhir-router-container"}[5m])
+85	1	 Erros HTTP 4xx 	 sum(increase(http_server_requests_seconds_count{status=~"4..",uri!="actuator/prometheus",container="inbound-fhir-router-container"}[5m]))
+86	1	 Erros HTTP 5xx por Endpoint 	 sum(increase(http_server_requests_seconds_count{status=~"5..", uri!="/actuator/prometheus", container="inbound-fhir-router-container"}[5m]))
+174	1	 Taxa de Requisições para /actuator/health – FHIR 	 http_server_requests_seconds_count{container="inbound-fhir-router-container"}
+177	1	 Sessões HTTP Ativas (Tomcat) 	 tomcat_sessions_active_current_sessions{container="inbound-fhir-router-container"}
+179	1	 Total de Sessões Criadas 	 tomcat_sessions_created_sessions_total{container="inbound-fhir-router-container"}
+5	2	 Container CPU Consumption 	 rate(container_cpu_usage_seconds_total{container="inbound-fhir-router-container"}[5m])
+6	2	 System CPU Usage (%) 	 system_cpu_usage{container="inbound-fhir-router-container"}
+9	2	 Total Memory Usage 	 container_memory_usage_bytes{container="inbound-fhir-router-container"}
+10	2	 Container Max Memory Usage 	 container_memory_max_usage_bytes{container="inbound-fhir-router-container"}
+14	2	 JVM Heap Utilization 	 100 * jvm_memory_used_bytes{area="heap",container="inbound-fhir-router-container"} / jvm_memory_max_bytes{area="heap",container="inbound-fhir-router-container"} and jvm_memory_max_bytes{area="heap",container="inbound-fhir-router-container"} > 0
+15	2	 JVM GC Overhead (%) 	 avg_over_time(jvm_gc_overhead{container="inbound-fhir-router-container"}[5m])
+17	2	 Live Heap Size After GC 	 increase(jvm_gc_live_data_size_bytes{container="inbound-fhir-router-container"}[30m])
+20	2	 JVM Live Threads 	 deriv(jvm_threads_live_threads{container="inbound-fhir-router-container"}[10m])
+21	2	 Maximum JVM Threads 	 jvm_threads_live_threads{container="inbound-fhir-router-container"}
+25	2	 HTTP – Requisições por Segundo (RPS) 	 rate(http_server_requests_seconds_count[5m])
+26	2	 HTTP – Latência Máxima Observada 	 http_server_requests_seconds_max{container="inbound-fhir-router-container"}
+27	2	 HTTP – Tempo Máximo de Requisição Ativa 	 http_server_requests_active_seconds_max{container="inbound-fhir-router-container"}
+29	2	 HikariCP – Conexões Ativas 	 hikaricp_connections_active{container="inbound-fhir-router-container"}
+31	2	 HikariCP – Conexões Pendentes 	 hikaricp_connections_pending{container="inbound-fhir-router-container"}
+33	2	 HikariCP – Taxa de Timeout de Conexões 	 rate(hikaricp_connections_timeout_total[1m])
+37	2	 Executor – Tarefas na Fila 	 executor_queued_tasks{container="inbound-fhir-router-container"}
+38	2	 Executor – Capacidade Restante da Fila 	 executor_queue_remaining_tasks{container="inbound-fhir-router-container"}
+40	2	 Container – Uso de Disco 	 container_fs_usage_bytes{container="inbound-fhir-router-container"}
+59	2	 Container – Operações de Leitura em Disco 	 rate(container_fs_reads_total{container="inbound-fhir-router-container"}[5m])
+60	2	 Container – Operações de Escrita em Disco 	 rate(container_fs_writes_total{container="inbound-fhir-router-container"}[5m])
+61	2	 Container – Uso Total de I/O em Disco (Block I/O) 	 rate(container_blkio_device_usage_total{container="inbound-fhir-router-container"}[5m])
+97	2	 Frequência de pausas do Garbage Collector (GC) 	 rate(jvm_gc_pause_seconds_count{container="inbound-fhir-router-container"}[5m])
+98	2	 tempo médio de pausa do Garbage Collector 	 rate(jvm_gc_pause_seconds_sum{container="inbound-fhir-router-container"}[5m]) / rate(jvm_gc_pause_seconds_count{container="inbound-fhir-router-container"}[5m])
+101	2	 Maior Pausa do Garbage Collector 	 jvm_gc_pause_seconds_max{container="inbound-fhir-router-container"}
+8	3	 System CPU Core Count 	 system_cpu_count{container="inbound-fhir-router-container"}
+22	3	 JVM – Threads Daemon Ativas 	 jvm_threads_daemon_threads{container="inbound-fhir-router-container"}
+23	3	 JVM – Distribuição de Threads por Estado 	 jvm_threads_states_threads{container="inbound-fhir-router-container"}
+24	3	 JVM – Threads Criadas (Total) 	 rate(jvm_threads_started_threads_total[5m])
+28	3	 HTTP – Contador de Observações de Requisições Ativas 	 http_server_requests_active_seconds_count{container="inbound-fhir-router-container"}
+30	3	 HikariCP – Conexões Ociosas 	 hikaricp_connections_idle{container="inbound-fhir-router-container"}
+32	3	 HikariCP – Máximo de Conexões Configurado 	 hikaricp_connections_active / hikaricp_connections_max
+34	3	 JDBC – Conexões Ativas 	 jdbc_connections_active{container="inbound-fhir-router-container"}
+35	3	 JDBC – Conexões Ociosas 	 jdbc_connections_idle{container="inbound-fhir-router-container"}
+36	3	 JDBC – Máximo de Conexões Configurado 	 jdbc_connections_max{container="inbound-fhir-router-container"}
+39	3	 Executor – Máximo de Threads Configurado 	 executor_active_threads / executor_pool_max_threads
+41	3	 Container – Limite de Disco Disponível 	 container_fs_limit_bytes{container="inbound-fhir-router-container"}
+42	3	 Container – Inodes Livres 	 container_fs_inodes_free{container="inbound-fhir-router-container"}
+43	3	 Container – Total de Inodes 	 container_fs_inodes_total{container="inbound-fhir-router-container"}
+44	3	 Container – Uso de Disco por Logs 	 kubelet_container_log_filesystem_used_bytes{container="inbound-fhir-router-container"}
+46	3	 Processo – Arquivos Abertos (FDs) 	 process_files_open_files{container="inbound-fhir-router-container"}
+47	3	 Processo – Limite Máximo de Arquivos (FDs) 	 process_files_open_files / process_files_max_files * 100
+49	3	 Processo – Uso de CPU 	 process_cpu_usage{container="inbound-fhir-router-container"}
+55	3	 Container – Threads Ativas 	 container_threads{container="inbound-fhir-router-container"}
+56	3	 Container – Processos em Execução 	 container_processes{container="inbound-fhir-router-container"}
+57	3	 Container – Sockets Abertos 	 container_sockets{container="inbound-fhir-router-container"}
+58	3	 Container – Limites de Recursos (Ulimit Soft) 	 container_ulimits_soft{container="inbound-fhir-router-container"}
+62	3	 JVM – Memória de Buffers em Uso 	 jvm_buffer_memory_used_bytes{container="inbound-fhir-router-container"}
+63	3	 JVM – Capacidade Total de Buffers 	 jvm_buffer_total_capacity_bytes{container="inbound-fhir-router-container"}
+64	3	 JVM – Classes Carregadas 	 jvm_classes_loaded_classes{container="inbound-fhir-router-container"}
+65	3	 JVM – Tempo Total de Compilação JIT 	 rate(jvm_compilation_time_ms_total{container="inbound-fhir-router-container"}[5m])
+67	3	 Tomcat – Sessões Expiradas (Total) 	 rate(tomcat_sessions_expired_sessions_total{container="inbound-fhir-router-container"}[5m])
+68	3	 Tomcat – Sessões Rejeitadas (Total) 	 rate(tomcat_sessions_rejected_sessions_total{container="inbound-fhir-router-container"}[5m])
+72	3	 Uso de Memória (MiB) por Container 	 sum(container_memory_usage_bytes{container="inbound-fhir-router-container"})
+74	3	 Percentual de RAM referente ao cluster 	 100 * sum(container_memory_working_set_bytes{container="inbound-fhir-router-container"}) / sum(machine_memory_bytes)
+75	3	 Percentual de CPU referente ao cluster 	 100 * sum(rate(container_cpu_usage_seconds_total{container="inbound-fhir-router-container"}[5m])) / sum(machine_cpu_cores)
+77	3	 Total de Endpoints Acessados 	 count(http_server_requests_seconds_count{container="inbound-fhir-router-container"}) by (uri)
+80	3	 Requisições HTTP Recebidas 	 sum(increase(http_server_requests_seconds_count{container="inbound-fhir-router-container"}[5m]))
+82	3	 Requisições HTTP 	 rate(http_server_requests_seconds_count{container="inbound-fhir-router-container"}[5m])
+83	3	 Tempo Médio de Resposta HTTP 	 sum(rate(http_server_requests_seconds_sum{container="inbound-fhir-router-container"}[5m])) / sum(rate(http_server_requests_seconds_count{container="inbound-fhir-router-container"}[5m]))
+84	3	 Taxa de Sucesso de Requisições HTTP 	 sum(increase(http_server_requests_seconds_count{status=~"2..", uri!="/actuator/prometheus", container="inbound-fhir-router-container"}[5m]))
+87	3	 Uso da CPU SpringBoot 	 process_cpu_usage{container="inbound-fhir-router-container"} * 100
+88	3	 Uso de CPU do processo 	 100 * rate(process_cpu_time_ns_total{container="inbound-fhir-router-container"}[5m]) / 1e9 / system_cpu_count
+89	3	 Uso de Disco (%) 	 100 * (1 - (disk_free_bytes / disk_total_bytes{container="inbound-fhir-router-container"}))
+90	3	 Carga média do sistema (1 minuto) 	 system_load_average_1m{container="inbound-fhir-router-container"}
+91	3	 Uso de Memória Heap (MB) 	 jvm_memory_used_bytes{container="inbound-fhir-router-container", area="heap"} / 1024 / 1024
+92	3	 Uso de Memória Non-Heap (MB) 	 jvm_memory_used_bytes{container="inbound-fhir-router-container",area="nonheap"} / 1024 / 1024
+93	3	 Uso de Heap JVM (% reservado) 	 100 * (jvm_memory_used_bytes{container="inbound-fhir-router-container", area="heap"} / jvm_memory_committed_bytes{area="heap"})
+94	3	 Uso de Non-Heap JVM (% reservado) 	 100 * (jvm_memory_used_bytes{container="inbound-fhir-router-container", area="nonheap"} / jvm_memory_committed_bytes{area="nonheap"})
+95	3	 Capacidade Máxima de Memória por Área 	 jvm_memory_max_bytes{container="inbound-fhir-router-container"}
+96	3	 JVM Heap Usage After GC 	 jvm_memory_usage_after_gc{container="inbound-fhir-router-container", area="heap",pool="long-lived"} * 100
+99	3	 GC Pause Duration Rate 	 rate(jvm_gc_pause_seconds_sum{container="inbound-fhir-router-container"}[5m])
+100	3	 Memória Usada por Buffers da JVM 	 jvm_buffer_memory_used_bytes{container="inbound-fhir-router-container"} / 1024 / 1024
+102	3	 Taxa de memória promovida ao heap velho 	 rate(jvm_gc_memory_promoted_bytes_total{container="inbound-fhir-router-container"}[5m])
+103	3	 Taxa de alocação de memória da JVM 	 rate(jvm_gc_memory_allocated_bytes_total{container="inbound-fhir-router-container"}[5m])
+104	3	 Visão Geral de Threads da JVM 	 jvm_threads_live_threads{container=~"inbound-fhir-router-container"}
+106	3	 Taxa de Criação de Threads 	 rate(jvm_threads_started_threads_total{container="inbound-fhir-router-container"}[5m])
+108	3	 Total de Classes Descarregadas 	 jvm_classes_unloaded_classes_total{container="inbound-fhir-router-container"}
+109	3	 Tempo Total de Compilação JIT 	 jvm_compilation_time_ms_total{container="inbound-fhir-router-container"}
+110	3	 Quantidade de Buffers da JVM 	 jvm_buffer_count_buffers{container="inbound-fhir-router-container"}
+111	3	 Capacidade Total dos Buffers da JVM 	 jvm_buffer_total_capacity_bytes{container="inbound-fhir-router-container"} / 1024 / 1024
+114	3	 Pico de Sessões Ativas no Tomcat 	 tomcat_sessions_active_max_sessions{container="inbound-fhir-router-container"}
+115	3	 Total de Sessões Criadas no Tomcat 	 increase(tomcat_sessions_created_sessions_total{container="inbound-fhir-router-container"}[5m])
+116	3	 Tempo Máximo de Vida de Sessão HTTP no Tomcat 	 tomcat_sessions_alive_max_seconds{container="inbound-fhir-router-container"}
+117	3	 Sessões Expiradas no Tomcat 	 increase(tomcat_sessions_expired_sessions_total{container="inbound-fhir-router-container"}[5m])
+118	3	 Sessões Rejeitadas no Tomcat 	 increase(tomcat_sessions_rejected_sessions_total{container="inbound-fhir-router-container"}[5m])
+119	3	 Tempo total de requisições ativas 	 rate(http_server_requests_active_seconds_sum{container="inbound-fhir-router-container"}[5m])
+120	3	 Taxa de Requisições HTTP Ativas 	 rate(http_server_requests_active_seconds_count{container="inbound-fhir-router-container"}[5m])
+121	3	 Tempo máximo de requisição ativa 	 avg_over_time(http_server_requests_active_seconds_max{container="inbound-fhir-router-container"}[5m])
+123	3	 Tempo Médio das Chamadas aos Repositórios Spring Data 	 rate(spring_data_repository_invocations_seconds_sum{container="inbound-fhir-router-container"}[1m]) / rate(spring_data_repository_invocations_seconds_count{container="inbound-fhir-router-container"}[1m])
+124	3	 Taxa de Invocações de Repositórios Spring Data 	 sum by(repository, method, state) (rate(spring_data_repository_invocations_seconds_count{container="inbound-fhir-router-container"}[1m]))
+126	3	 Taxa de STATUS nos Repositórios Spring Data por Tipo de Exceção 	 rate(spring_data_repository_invocations_seconds_count{container="inbound-fhir-router-container", state="ERROR"}[1m])
+127	3	 Top 5 Repositórios com Maior Latência Média 	 topk(5, rate(spring_data_repository_invocations_seconds_sum{container="inbound-fhir-router-container"}[1m]) / rate(spring_data_repository_invocations_seconds_count{container="inbound-fhir-router-container"}[1m]))
+128	3	 Tempo Total Gasto por Método 	 sum by(repository, method) (rate(spring_data_repository_invocations_seconds_sum{container="inbound-fhir-router-container"}[1m]))
+129	3	 Taxa de Invocações dos Repositórios Spring Data 	 sum by(repository, method, state) (rate(spring_data_repository_invocations_seconds_count{container="inbound-fhir-router-container"}[5m]))
+130	3	 Active Threads in Executor 	 executor_active_threads{container="inbound-fhir-router-container"}
+131	3	 Total Completed Executor Tasks 	 increase(executor_completed_tasks_total{container="inbound-fhir-router-container"}[1m])
+132	3	 Executor Core Pool Size 	 executor_pool_core_threads{container="inbound-fhir-router-container"}
+133	3	 Executor Max Pool Size 	 executor_pool_max_threads{container="inbound-fhir-router-container"}
+134	3	 Executor Pool Size (Current) 	 executor_pool_size_threads{container="inbound-fhir-router-container"}
+137	3	 Log Events by Level 	 increase(logback_events_total{container="inbound-fhir-router-container"}[5m])
+138	3	 Thread Pool Overview 	 executor_active_threads{job="hip-backoffice-svc"}
+139	3	 Tarefas Concluídas pelo Executor 	 rate(executor_completed_tasks_total{container="inbound-fhir-router-container"}[5m])
+140	3	 Tamanho Médio do Pool Core 	 avg_over_time(executor_pool_core_threads{container="inbound-fhir-router-container"}[5m])
+141	3	 Tamanho Máximo do Pool de Threads 	 avg_over_time(executor_pool_max_threads{container="inbound-fhir-router-container"}[5m])
+142	3	 Tamanho Atual do Pool de Threads 	 avg_over_time(executor_pool_size_threads{container="inbound-fhir-router-container"}[5m])
+143	3	 Capacidade Restante da Fila do Executor 	 avg_over_time(executor_queue_remaining_tasks{container="inbound-fhir-router-container"}[5m])
+144	3	 Tarefas Enfileiradas no Executor 	 avg_over_time(executor_queued_tasks{container="inbound-fhir-router-container"}[5m])
+145	3	 Aquisições de Conexões HikariCP 	 rate(hikaricp_connections_acquire_seconds_count{container="inbound-fhir-router-container"}[5m])
+146	3	 Tempo Máximo para Aquisição de Conexão 	 avg_over_time(hikaricp_connections_acquire_seconds_max{container="inbound-fhir-router-container"}[5m])
+147	3	 Tempo Total para Aquisição de Conexões 	 avg_over_time(hikaricp_connections_acquire_seconds_sum{container="inbound-fhir-router-container"}[5m])
+148	3	 Conexões Ativas no HikariCP 	 avg_over_time(hikaricp_connections_active{container="inbound-fhir-router-container"}[5m])
+149	3	 Criações de Conexões HikariCP 	 rate(hikaricp_connections_creation_seconds_count{container="inbound-fhir-router-container"}[5m])
+150	3	 Tempo Máximo de Criação de Conexão 	 avg_over_time(hikaricp_connections_creation_seconds_max{container="inbound-fhir-router-container"}[5m])
+151	3	 Tempo total de criação de conexões 	 rate(hikaricp_connections_creation_seconds_sum{container="inbound-fhir-router-container"}[5m])
+152	3	 Conexões inativas no pool 	 avg_over_time(hikaricp_connections_idle{container="inbound-fhir-router-container"}[5m])
+153	3	 Limite máximo de conexões 	 avg_over_time(hikaricp_connections_max{container="inbound-fhir-router-container"}[5m])
+154	3	 Conexões mínimas no pool 	 avg_over_time(hikaricp_connections_min{container="inbound-fhir-router-container"}[5m])
+155	3	 Conexões pendentes no pool 	 avg_over_time(hikaricp_connections_pending{container="inbound-fhir-router-container"}[5m])
+156	3	 Timeouts ao Obter Conexões 	 increase(hikaricp_connections_timeout_total{container="inbound-fhir-router-container"}[5m])
+157	3	 Quantidade de Conexões Utilizadas 	 increase(hikaricp_connections_usage_seconds_count{container="inbound-fhir-router-container"}[5m])
+158	3	 Tempo Máximo de Uso de Conexão 	 avg_over_time(hikaricp_connections_usage_seconds_max{container="inbound-fhir-router-container"}[5m])
+159	3	 Tempo Total de Uso das Conexões 	 avg_over_time(hikaricp_connections_usage_seconds_sum{container="inbound-fhir-router-container"}[5m])
+160	3	 Total de Conexões no Pool 	 avg_over_time(hikaricp_connections{container="inbound-fhir-router-container"}[5m])
+161	3	 Conexões JDBC Ativas 	 avg_over_time(jdbc_connections_active{container="inbound-fhir-router-container"}[5m])
+162	3	 Conexões JDBC 	 avg_over_time(jdbc_connections_idle{container="inbound-fhir-router-container"}[5m])
+163	3	 Número Máximo de Conexões JDBC Permitidas 	 avg_over_time(jdbc_connections_max{container="inbound-fhir-router-container"}[5m])
+164	3	 Número Mínimo de Conexões JDBC Configuradas 	 avg_over_time(jdbc_connections_min{container="inbound-fhir-router-container"}[5m])
+165	3	 Tamanho Atual dos Dados Vivos na Heap 	 avg_over_time(jvm_gc_live_data_size_bytes{container="inbound-fhir-router-container"}[5m])
+166	3	 Capacidade Máxima de Dados Vivos na Heap 	 avg_over_time(jvm_gc_max_data_size_bytes{container="inbound-fhir-router-container"}[5m])
+168	3	 Memória Committed da JVM 	 avg_over_time(jvm_memory_committed_bytes{container="inbound-fhir-router-container"}[5m])
+169	3	 Memória Máxima Configurada da JVM 	 avg_over_time(jvm_memory_max_bytes{container="inbound-fhir-router-container"}[5m])
+170	3	 Taxa de Eventos de Log por Segundo 	 rate(logback_events_total{container="inbound-fhir-router-container"}[5m])
+171	3	 Limite Máximo de Arquivos Abertos 	 avg_over_time(process_files_max_files{container="inbound-fhir-router-container"}[5m])
+172	3	 Arquivos Abertos pelo Processo 	 avg_over_time(process_files_open_files{container="inbound-fhir-router-container"}[5m])
+173	3	 Uso de CPU do Sistema 	 avg_over_time(system_cpu_usage{container="inbound-fhir-router-container"}[5m])
+180	3	 Uso de Memória Direct Buffer 	 jvm_buffer_memory_used_bytes{container="inbound-fhir-router-container", id="direct"}
+181	3	 Capacidade Total Direct Buffer 	 jvm_buffer_total_capacity_bytes{container="inbound-fhir-router-container", id="direct"}
+69	4	 Prometheus – Duração de Scrape do Container 	 scrape_duration_seconds{container="inbound-fhir-router-container"}
+70	4	 Prometheus – Métricas Coletadas por Scrape 	 scrape_samples_scraped{container="inbound-fhir-router-container"}
+71	4	 Prometheus – Séries Adicionadas por Scrape 	 rate(scrape_series_added{container="inbound-fhir-router-container"}[5m])
+112	4	 JVM Info - Ambiente e Versão 	 jvm_info{container="inbound-fhir-router-container"}
+			
